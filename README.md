@@ -12,7 +12,7 @@ A picture generator which translates pictures according to the sentence it recei
 ## Getting Start
 #### 1. Clone the repository
 ```bash
-$ git clone https://github.com/yunjey/StarGAN.git
+$ git clone https://github.com/NCHCSpeech/stargan_pic_generator.git
 $ cd StarGAN/
 ```
 #### 2. Download the dataset (CelebA dataset)
