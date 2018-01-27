@@ -19,7 +19,6 @@ $ cd StarGAN/
 ```bash
 $ bash download.sh
 ```
-
 #### 3. Generate pictures
 ```bash
 $ python3 generate_pic.py

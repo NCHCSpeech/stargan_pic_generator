@@ -171,31 +171,20 @@ class Inference(object):
 
         fixed_c_list = []
         
-        # single attribute transfer
-        for i in range(self.c_dim):
-            fixed_c = real_c.clone()
-            for c in fixed_c:
-                if i < 3:
-                    c[:3] = y[i]
-                else:
-                    c[i] = 0 if c[i] == 1 else 1   # opposite value
-            fixed_c_list.append(self.to_var(fixed_c, volatile=True))
-        
         # multi-attribute transfer (H+G, H+A, G+A, H+G+A)
         if self.dataset == 'CelebA':
-            for i in range(4):
-                fixed_c = real_c.clone()
-                for c in fixed_c:
-                    if i in [0, 1, 3]:   # Hair color
-                        for j in range(3):
-                            if input_label[j] == 1:
-                                c[:3] = y[j]
-                                break 
-                    if i in [0, 2, 3]:   # Gender
-                        c[3] = 0 if input_label[3] == 0 else 1
-                    if i in [1, 2, 3]:   # Aged
-                        c[4] = 0 if input_label[4] == 0 else 1
-                fixed_c_list.append(self.to_var(fixed_c, volatile=True))
+            fixed_c = real_c.clone()
+            for c in fixed_c:
+                # Hair color
+                for j in range(3):
+                    if input_label[j] == 1:
+                        c[:3] = y[j]
+                        break 
+                # Gender
+                c[3] = 0 if input_label[3] == 0 else 1
+                # Aged
+                c[4] = 0 if input_label[4] == 0 else 1
+            fixed_c_list.append(self.to_var(fixed_c, volatile=True))
 
         return fixed_c_list
     
@@ -252,8 +241,8 @@ class Inference(object):
 
         # Start translations
         fake_image_list = []
-        print(target_c_list[8])
-        fake_image_list.append(self.G(real_x, target_c_list[8]))
+        print(target_c_list[0])
+        fake_image_list.append(self.G(real_x, target_c_list[0]))
         #for target_c in target_c_list:
         #    fake_image_list.append(self.G(real_x, target_c))
         fake_images = torch.cat(fake_image_list, dim=3)

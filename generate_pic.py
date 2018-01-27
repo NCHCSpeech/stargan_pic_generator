@@ -68,7 +68,7 @@ if __name__ == '__main__':
     parser.add_argument('--pretrained_model', type=str, default=None)
 
     # Test settings
-    parser.add_argument('--test_model', type=str, default='20_1000')
+    parser.add_argument('--test_model', type=str, default='10_4000')
 
     # Misc
     parser.add_argument('--mode', type=str, default='test', choices=['train', 'test'])
