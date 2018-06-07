@@ -11,6 +11,8 @@ from torchvision.utils import save_image
 from torchvision import transforms
 from torch.autograd import Variable
 from crop_face import *
+import subprocess
+
 
 def denorm(x):
         out = (x + 1) / 2
@@ -57,16 +59,27 @@ def generate_new_image(image, features, crop_size=178, image_size=128,
     new_image = generator(image, label)
     save_image(denorm(new_image.data), save_path, nrow=1, padding=0)
     
-    new_image = Image.open(save_path)
+    #high_res
+    if args.highres == "true":
+        print("start")
+        subprocess.call("python3 enhance.py --type=photo tmp.jpg",shell=True)
+        print("end")
+    
+        new_image = Image.open('tmp_ne1x.png')
+    else:
+        new_image = Image.open(save_path)
     return new_image
 
 if __name__ == "__main__":
+    
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-i", "--image")
     parser.add_argument("-f", "--features", default=['Black_Hair', 'Male', 'Young'])
+    parser.add_argument("-e", "--highres", default="false")
 
     args = parser.parse_args()
+    
 
     image_name = args.image
     origin_img = Image.open(image_name)
@@ -75,9 +88,12 @@ if __name__ == "__main__":
         origin_img = generate_new_image(origin_img, args.features)
 
     for idx,(coordinates, face) in enumerate(result):
+        print("idx",idx)
+        print("coordinates:",coordinates)
         old_size = face.size
-        coordinates[2] += coordinates[0]
-        coordinates[3] += coordinates[1]
+        print("old_size",old_size)
+        #coordinates[2] += coordinates[0]
+        #coordinates[3] += coordinates[1]
         face = face.resize((128, 128))
 
         new_face = generate_new_image(face, args.features)
