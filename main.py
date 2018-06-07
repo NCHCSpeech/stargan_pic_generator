@@ -35,8 +35,8 @@ def main(config):
                                  config.image_size, config.batch_size, 'RaFD', config.mode)
 
     # Solver
-    #solver = Solver(celebA_loader, rafd_loader, config)
-    solver = Inference(celebA_loader, rafd_loader, config)
+    solver = Solver(celebA_loader, rafd_loader, config)
+    # solver = Inference(celebA_loader, rafd_loader, config)
     if config.mode == 'train':
         if config.dataset in ['CelebA', 'RaFD']:
             solver.train()
