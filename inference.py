@@ -165,9 +165,10 @@ class Inference(object):
         #elif dataset == 'Both':
         #    return single attribute changes
         
-        y = [torch.FloatTensor([1, 0, 0]),  # black hair
-             torch.FloatTensor([0, 1, 0]),  # blond hair
-             torch.FloatTensor([0, 0, 1])]  # brown hair
+        y = [torch.FloatTensor([1, 0, 0, 0]),  # black hair
+             torch.FloatTensor([0, 1, 0, 0]),  # blond hair
+             torch.FloatTensor([0, 0, 1, 0]),  # brown hair
+             torch.FloatTensor([0, 0, 0, 1])]  # Gray_Hair
 
         fixed_c_list = []
         
@@ -176,37 +177,46 @@ class Inference(object):
             fixed_c = real_c.clone()
             for c in fixed_c:
                 # Hair color
-                for j in range(3):
+                for j in range(4):
                     if input_label[j] == 1:
-                        c[:3] = y[j]
+                        c[:4] = y[j]
                         break 
                 # Gender
-                c[3] = 0 if input_label[3] == 0 else 1
-                # Aged
                 c[4] = 0 if input_label[4] == 0 else 1
+                # Aged
+                c[5] = 0 if input_label[5] == 0 else 1
+                c[6] = 0 if input_label[6] == 0 else 1
+                c[7] = 0 if input_label[7] == 0 else 1
             fixed_c_list.append(self.to_var(fixed_c, volatile=True))
 
         return fixed_c_list
     
     def input_parser(self, input_str):
         words = input_str.split()
-        y = [[1, 0, 0],  # black hair
-             [0, 1, 0],  # blond hair
-             [0, 0, 1]]  # brown hair
+        y = [[1, 0, 0, 0],  # black hair
+             [0, 1, 0, 0],  # blond hair
+             [0, 0, 1, 0],  # brown hair
+             [0, 0, 0, 1]]  # Gray_Hair
 
-        result = [1,0,0,0,1]
+        result = [1,0,0,0,0,1,0,0]
 
         for keys in words:
             if keys == 'black':
-       	        result[:3] = y[0]
+       	        result[:4] = y[0]
             elif keys == 'blond':
-                result[:3] = y[1]
+                result[:4] = y[1]
             elif keys == 'brown':
-                result[:3] = y[2]
+                result[:4] = y[2]
+            elif keys == 'gray':
+                result[:4] = y[3]
             if keys in ['man','male']:
-                result[3] = 1
+                result[4] = 1
             if keys in ['old']:
-                result[4] = 0
+                result[5] = 0
+            if keys in ['Smiling','smile']:
+                result[6] = 1
+            if keys in ['Eyeglasses','glasses']:
+                result[7] = 1
 
         return result
 
@@ -226,7 +236,6 @@ class Inference(object):
         random.seed()
         for i, (real_x, org_c) in enumerate(data_loader):
             if i == random.randint(0,len(data_loader)): break
-        
         real_x = self.to_var(real_x, volatile=True)
 
         if self.dataset == 'CelebA':
@@ -241,7 +250,7 @@ class Inference(object):
 
         # Start translations
         fake_image_list = []
-        print(target_c_list[0])
+        print('FUCK',target_c_list[0])
         fake_image_list.append(self.G(real_x, target_c_list[0]))
         #for target_c in target_c_list:
         #    fake_image_list.append(self.G(real_x, target_c))
