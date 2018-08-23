@@ -62,7 +62,7 @@ def generate_new_image(image, features, crop_size=178, image_size=128,
     #high_res
     if args.highres == "true":
         print("start")
-        subprocess.call("python3 enhance.py --type=photo tmp.jpg",shell=True)
+        subprocess.call("python3 enhance.py --type=photo --zoom=4 tmp.jpg",shell=True)
         print("end")
     
         new_image = Image.open('tmp_ne1x.png')
