@@ -5,7 +5,7 @@ A picture generator which translates pictures according to the sentence it recei
 
 ## Prerequisites
 * [Python 3.5+](https://www.continuum.io/downloads)
-* [PyTorch 0.2.0](http://pytorch.org/)
+* [PyTorch 0.4.0](http://pytorch.org/)
 * [TensorFlow 1.3+](https://www.tensorflow.org/) (optional for tensorboard)
 
 
@@ -13,13 +13,23 @@ A picture generator which translates pictures according to the sentence it recei
 #### 1. Clone the repository
 ```bash
 $ git clone https://github.com/NCHCSpeech/stargan_pic_generator.git
-$ cd StarGAN/
+$ cd stargan_pic_generator
 ```
-#### 2. Download the dataset (CelebA dataset)
+#### 2. Generate pictures
 ```bash
-$ bash download.sh
+$ python3 new_main.py -i image/path [-f ['hair_option', 'sex_option', 'age_option']] [-e true|false]
+
 ```
-#### 3. Generate pictures
-```bash
-$ python3 generate_pic.py
-```
+
+- hair_option
+  * Black_Hair
+  * Brown_Hair
+  * Blond_Hair
+
+- sex_option
+  * Male
+  * Female
+
+- age_option
+  * Old
+  * Young
