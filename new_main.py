@@ -85,6 +85,7 @@ if __name__ == "__main__":
     origin_img = Image.open(image_name)
     result = faceCrop(image_name)
     if not result:
+        origin_img = origin_img.resize((128,128))
         origin_img = generate_new_image(origin_img, args.features)
 
     for idx,(coordinates, face) in enumerate(result):
